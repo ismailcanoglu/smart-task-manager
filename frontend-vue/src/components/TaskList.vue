@@ -4,6 +4,10 @@ defineProps({
   tasks: {
     type: Array,
     required: true
+  },
+  pendingIds: {
+    type: Array,
+    default: () => []
   }
 })
 
@@ -16,7 +20,7 @@ const emit = defineEmits([
 <template>
   <div class="task-list">
     <p v-if="tasks.length === 0" class="empty">
-      Henüz görev bulunmuyor.
+      Bu kriterlere uygun görev bulunamadı.
     </p>
 
     <ul v-else>
@@ -24,6 +28,7 @@ const emit = defineEmits([
         <input
           type="checkbox"
           :checked="task.completed"
+          :disabled="pendingIds.includes(task.id)"
           :aria-label="`${task.title} tamamlandı`"
           @change="emit('toggle-task', task.id)"
         />
@@ -32,8 +37,17 @@ const emit = defineEmits([
           {{ task.title }}
         </span>
 
+        <span
+          v-if="pendingIds.includes(task.id)"
+          class="pending"
+          role="status"
+        >
+          İşleniyor...
+        </span>
+
         <button
-          class="delete-btn"
+          type="button"
+          :disabled="pendingIds.includes(task.id)"
           @click="emit('delete-task', task.id)"
         >
           Sil
@@ -45,8 +59,8 @@ const emit = defineEmits([
 
 <style scoped>
 ul {
-  list-style: none;
   padding: 0;
+  list-style: none;
 }
 
 li {
@@ -57,7 +71,7 @@ li {
   border-bottom: 1px solid #e5e7eb;
 }
 
-li span {
+li span:first-of-type {
   flex: 1;
   min-width: 0;
   overflow-wrap: anywhere;
@@ -68,18 +82,28 @@ li span {
   color: #9ca3af;
 }
 
-.delete-btn {
-  background: #ef4444;
-  color: white;
-  border: none;
+.pending {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+button {
+  border: 0;
+  background: #fee2e2;
+  color: #b91c1c;
   padding: 9px 14px;
   border-radius: 7px;
   cursor: pointer;
 }
 
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+
 .empty {
-  color: #6b7280;
   text-align: center;
+  color: #6b7280;
   padding: 30px;
 }
 </style>

@@ -1,21 +1,35 @@
 
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
 
 app = FastAPI(title="TaskFlow API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5500", "http://127.0.0.1:5500"],
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:5500",
+        "http://127.0.0.1:5500",
+        ],
     allow_methods=["GET", "POST", "PATCH", "DELETE"],
     allow_headers=["Content-Type"],
 )
 
 
 class TaskCreate(BaseModel):
-    title: str = Field(min_length=1, max_length=200)
+    title: str = Field(min_length=3, max_length=200)
 
+    @field_validator("title")
+    @classmethod
+    def validate_title(cls, value: str) -> str:
+        title = value.strip()
+
+        if len(title) < 3:
+            raise ValueError("Görev başlığı en az 3 karakter olmalıdır.")
+
+        return title
 
 class Task(TaskCreate):
     id: int
