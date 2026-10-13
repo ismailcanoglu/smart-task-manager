@@ -3,20 +3,28 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, Field, field_validator
 
-app = FastAPI(title="TaskFlow API")
+from pathlib import Path
+from sqlalchemy import text
+from app.db.session import engine
 
+from app.routers.tasks import router as tasks_router
+
+
+app = FastAPI(
+    title="TaskFlow API",
+    version="0.3.0"
+)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
         "http://localhost:5173",
-        "http://127.0.0.1:5173",
-        "http://localhost:5500",
-        "http://127.0.0.1:5500",
-        ],
+        "http://127.0.0.1:5173"
+    ],
     allow_methods=["GET", "POST", "PATCH", "DELETE"],
-    allow_headers=["Content-Type"],
+    allow_headers=["Content-Type"]
 )
 
+app.include_router(tasks_router)
 
 class TaskCreate(BaseModel):
     title: str = Field(min_length=3, max_length=200)
@@ -40,9 +48,13 @@ tasks: list[Task] = []
 next_id = 1
 
 
+
 @app.get("/")
 def home():
-    return {"message": "TaskFlow API is running"}
+    return {
+        "message": "TaskFlow API is running",
+        "version": "0.3.0"
+    }
 
 
 @app.get("/api/tasks", response_model=list[Task])
@@ -79,3 +91,21 @@ def delete_task(task_id: int):
             return
 
     raise HTTPException(status_code=404, detail="Task not found")
+
+
+@app.get("/debug/database")
+def debug_database():
+    with engine.connect() as conn:
+        database = conn.execute(
+            text("SELECT current_database()")
+        ).scalar()
+
+        count = conn.execute(
+            text("SELECT COUNT(*) FROM public.tasks")
+        ).scalar()
+
+    return {
+        "app_file": str(Path(__file__).resolve()),
+        "database": database,
+        "task_count": count
+    }
