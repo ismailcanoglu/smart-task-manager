@@ -1,4 +1,6 @@
 
+import logging
+
 from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -6,8 +8,6 @@ from sqlalchemy.orm import Session
 from app.db.session import get_db
 from app.models.task import Task
 from app.schemas.task import TaskCreate, TaskRead
-
-import logging
 
 logger = logging.getLogger(__name__)
 

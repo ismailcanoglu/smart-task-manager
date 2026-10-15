@@ -1,3 +1,5 @@
+from sqlalchemy.exc import OperationalError
+
 
 def test_create_task(client):
     response = client.post(
@@ -69,9 +71,6 @@ def test_missing_task(client):
     response = client.patch("/api/tasks/99999")
 
     assert response.status_code == 404
-
-
-from sqlalchemy.exc import OperationalError
 
 
 def test_database_error_returns_500(client, monkeypatch):

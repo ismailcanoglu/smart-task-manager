@@ -9,7 +9,6 @@ from sqlalchemy.exc import SQLAlchemyError
 from app.core.logging_config import setup_logging
 from app.routers.tasks import router as tasks_router
 
-
 setup_logging()
 
 logger = logging.getLogger(__name__)

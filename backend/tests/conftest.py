@@ -1,16 +1,13 @@
 
 import pytest
-
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import StaticPool
 
-from app.main import app
 from app.db.base import Base
 from app.db.session import get_db
-from app.models.task import Task  # Modeli metadata'ya kaydeder
-
+from app.main import app
 
 engine = create_engine(
     "sqlite://",
