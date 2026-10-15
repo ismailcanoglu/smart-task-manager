@@ -7,6 +7,9 @@ from app.db.session import get_db
 from app.models.task import Task
 from app.schemas.task import TaskCreate, TaskRead
 
+import logging
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(
     prefix="/api/tasks",
@@ -32,6 +35,7 @@ def create_task(
     db.add(task)
     db.commit()
     db.refresh(task)
+    logger.info("Task created: id=%s", task.id)
 
     return task
 
@@ -53,6 +57,11 @@ def toggle_task(
     task.completed = not task.completed
 
     db.commit()
+    logger.info(
+    "Task updated: id=%s completed=%s",
+    task.id,
+    task.completed,
+    )
     db.refresh(task)
 
     return task
@@ -74,5 +83,6 @@ def delete_task(
 
     db.delete(task)
     db.commit()
+    logger.info("Task deleted: id=%s", task_id)
 
     return Response(status_code=204)
