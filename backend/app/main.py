@@ -1,4 +1,3 @@
-
 import logging
 
 from fastapi import FastAPI, Request
@@ -33,9 +32,7 @@ async def database_exception_handler(
 
     return JSONResponse(
         status_code=500,
-        content={
-            "detail": "Veritabani islemi tamamlanamadi."
-        },
+        content={"detail": "Veritabani islemi tamamlanamadi."},
     )
 
 

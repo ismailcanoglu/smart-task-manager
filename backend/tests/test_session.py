@@ -1,4 +1,3 @@
-
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -14,10 +13,8 @@ def test_get_db_opens_and_closes_session():
     fake_session.__enter__.return_value = fake_session
 
     with patch(
-        "app.db.session.SessionLocal",
-        return_value=fake_session
+        "app.db.session.SessionLocal", return_value=fake_session
     ) as mock_session_local:
-
         dependency = get_db()
 
         db = next(dependency)

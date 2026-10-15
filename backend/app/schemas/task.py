@@ -1,12 +1,8 @@
-
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class TaskCreate(BaseModel):
-    title: str = Field(
-        min_length=3,
-        max_length=200
-    )
+    title: str = Field(min_length=3, max_length=200)
 
     @field_validator("title")
     @classmethod
@@ -14,9 +10,7 @@ class TaskCreate(BaseModel):
         title = value.strip()
 
         if len(title) < 3:
-            raise ValueError(
-                "Görev başlığı en az 3 karakter olmalıdır."
-            )
+            raise ValueError("Görev başlığı en az 3 karakter olmalıdır.")
 
         return title
 
@@ -26,6 +20,4 @@ class TaskRead(BaseModel):
     title: str
     completed: bool
 
-    model_config = ConfigDict(
-        from_attributes=True
-    )
+    model_config = ConfigDict(from_attributes=True)

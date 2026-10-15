@@ -1,4 +1,3 @@
-
 import logging
 
 from fastapi import APIRouter, Depends, HTTPException, Response
@@ -11,10 +10,7 @@ from app.schemas.task import TaskCreate, TaskRead
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(
-    prefix="/api/tasks",
-    tags=["Tasks"]
-)
+router = APIRouter(prefix="/api/tasks", tags=["Tasks"])
 
 
 # READ - Görevleri listele
@@ -26,10 +22,7 @@ def get_tasks(db: Session = Depends(get_db)):
 
 # CREATE - Yeni görev oluştur
 @router.post("", response_model=TaskRead, status_code=201)
-def create_task(
-    payload: TaskCreate,
-    db: Session = Depends(get_db)
-):
+def create_task(payload: TaskCreate, db: Session = Depends(get_db)):
     task = Task(title=payload.title)
 
     db.add(task)
@@ -42,25 +35,19 @@ def create_task(
 
 # UPDATE - Görev durumunu değiştir
 @router.patch("/{task_id}", response_model=TaskRead)
-def toggle_task(
-    task_id: int,
-    db: Session = Depends(get_db)
-):
+def toggle_task(task_id: int, db: Session = Depends(get_db)):
     task = db.get(Task, task_id)
 
     if task is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Task not found"
-        )
+        raise HTTPException(status_code=404, detail="Task not found")
 
     task.completed = not task.completed
 
     db.commit()
     logger.info(
-    "Task updated: id=%s completed=%s",
-    task.id,
-    task.completed,
+        "Task updated: id=%s completed=%s",
+        task.id,
+        task.completed,
     )
     db.refresh(task)
 
@@ -69,17 +56,11 @@ def toggle_task(
 
 # DELETE - Görevi sil
 @router.delete("/{task_id}", status_code=204)
-def delete_task(
-    task_id: int,
-    db: Session = Depends(get_db)
-):
+def delete_task(task_id: int, db: Session = Depends(get_db)):
     task = db.get(Task, task_id)
 
     if task is None:
-        raise HTTPException(
-            status_code=404,
-            detail="Task not found"
-        )
+        raise HTTPException(status_code=404, detail="Task not found")
 
     db.delete(task)
     db.commit()
