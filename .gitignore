@@ -14,3 +14,11 @@ dist/
 
 # Editor
 .vscode/
+
+# Python coverage
+.coverage
+.coverage.*
+htmlcov/
+
+# Frontend coverage
+coverage/

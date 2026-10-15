@@ -22,3 +22,8 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+.coverage
+coverage/
+htmlcov/
+.pytest_cache/

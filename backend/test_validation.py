@@ -1,13 +1,8 @@
-
 from pydantic import ValidationError
+
 from app.schemas.task import TaskCreate
 
-test_titles = [
-    "Vue öğren",
-    "ab",
-    "   ",
-    "PostgreSQL öğren"
-]
+test_titles = ["Vue öğren", "ab", "   ", "PostgreSQL öğren"]
 
 for title in test_titles:
     try:

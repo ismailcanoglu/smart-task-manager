@@ -1,5 +1,5 @@
-
 from sqlalchemy import text
+
 from app.db.session import engine
 
 with engine.begin() as conn:
@@ -9,10 +9,7 @@ with engine.begin() as conn:
             VALUES (:title, :completed)
             RETURNING id
         """),
-        {
-            "title": "Python doğrudan kayıt testi",
-            "completed": False
-        }
+        {"title": "Python doğrudan kayıt testi", "completed": False},
     )
 
     task_id = result.scalar_one()
@@ -25,7 +22,7 @@ with engine.connect() as conn:
             FROM public.tasks
             WHERE id = :id
         """),
-        {"id": task_id}
+        {"id": task_id},
     )
 
     print("Veritabanındaki kayıt:", result.fetchone())
