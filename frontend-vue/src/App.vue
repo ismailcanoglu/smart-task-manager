@@ -6,7 +6,7 @@ import TaskForm from './components/TaskForm.vue'
 import TaskList from './components/TaskList.vue'
 import TaskFilters from './components/TaskFilters.vue'
 import StatCard from './components/StatCard.vue'
-import { taskService } from './services/taskService'
+import { taskApi as taskService } from './services/taskApi' 
 
 // Reactive state
 const tasks = ref([])
@@ -153,7 +153,7 @@ onMounted(loadTasks)
       </nav>
 
       <div class="sidebar-footer">
-        TaskFlow v0.2
+        TaskFlow v0.3
       </div>
     </aside>
 
