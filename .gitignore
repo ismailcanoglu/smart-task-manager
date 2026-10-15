@@ -1,5 +1,16 @@
-backend/.venv/
-__pycache__/
+# Python
+**/.venv/
+**/__pycache__/
 *.pyc
+.pytest_cache/
+
+# Environment secrets
 .env
+**/.env
+
+# Frontend
+node_modules/
+dist/
+
+# Editor
 .vscode/
